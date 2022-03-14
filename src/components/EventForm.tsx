@@ -3,7 +3,7 @@ import { Button, DatePicker, Form, Input, Row, Select } from 'antd';
 import { rules } from '../utils/rules';
 import { IUser } from '../models/IUser';
 import { IEvent } from '../models/IEvent';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { formatDate } from '../utils/date';
 import { useTypedSelector } from '../hooks/useTypedSelector';
 
@@ -48,13 +48,19 @@ const EventForm: FC<EventFormProps> = (props) => {
         name="date"
         rules={[
           rules.required(),
-          rules.isDateAfter('Нельзя создать событие в прошлом'),
+          rules.isDateAfter('Can\'t create an event in the past'),
         ]}
       >
-        <DatePicker onChange={(date) => selectDate(date)} />
+        <DatePicker onChange={(date) => {
+            console.log(date, 'date')
+            selectDate(date)
+        }} />
       </Form.Item>
-      <Form.Item label="Select a guest" name="guest" rules={[rules.required()]}>
-        <DatePicker onChange={(date) => selectDate(date)} />
+
+      <Form.Item
+          label="Select a guest"
+          name="guest"
+          rules={[rules.required()]}>
         <Select onChange={(guest: string) => setEvent({ ...event, guest })}>
           {props.guests.map((guest) => (
             <Select.Option key={guest.username} value={guest.username}>
